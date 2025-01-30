@@ -81,6 +81,7 @@ df_train = data[['Date', 'Close']]
 df_train = df_train.rename(columns={"Date": "ds", "Close": "y"})
 #日付のみの情報に置き換える
 df_train["ds"] = pd.to_datetime(df_train["ds"]).dt.date
+
 # データの前処理
 df_train['y'] = df_train['y'].astype(str).str.strip()
 df_train['y'] = df_train['y'].str.replace(r'[^\d.]', '', regex=True)
@@ -96,7 +97,7 @@ df_train['y'].fillna(df_train['y'].mean(), inplace=True)
 # print("Dtype",df_train['y'].dtype)
 # print("Dtype",df_train['ds'].dtype)
 # print(df_train['ds'])
-print("#####################")
+# print("#####################")
 
 model = Prophet()
 model.fit(df_train)
