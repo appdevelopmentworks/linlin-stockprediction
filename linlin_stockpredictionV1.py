@@ -80,7 +80,7 @@ st.write(data.tail())
 df_train = data[['Date', 'Close']]
 df_train = df_train.rename(columns={"Date": "ds", "Close": "y"})
 #日付のみの情報に置き換える
-df_train["ds"] = pd.to_datetime(df_train["ds"]).dt.date
+#df_train["ds"] = pd.to_datetime(df_train["ds"]).dt.date
 
 # データの前処理
 df_train['y'] = df_train['y'].astype(str).str.strip()
