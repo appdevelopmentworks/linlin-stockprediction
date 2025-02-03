@@ -13,6 +13,8 @@ TODAY = date.today().strftime("%Y-%m-%d")
 #元の株データを取得
 def load_rawdata(ticker):
     data = yf.download(ticker, START, TODAY)
+    #最新バージョンのyfinanceに対応させるため
+    data.columns = [col[0] for col in data.columns]
     return data
 #予想用のデータセットにインデックスをリセット
 def load_data(df):
@@ -47,7 +49,7 @@ st.title("株価予想")
 #マグニフィセント・セブン
 stocks = ["GOOG","AAPL","META","AMZN","MSFT","NVDA","TSLA"]
 
-text_input = st.text_input("ティッカーコードを入力してください：（例：7203.T）")
+text_input = st.text_input("ティッカーコードを入力してください：（例：8151.T, 4449.T, etc）")
 #stocks.insert(0, text_input)
 
 #テキストボックスに入力あればそれを使用し
