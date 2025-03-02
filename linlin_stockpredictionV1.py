@@ -1,5 +1,6 @@
 import streamlit as st
 from datetime import date
+import re
 
 import yfinance as yf
 import pandas as pd
@@ -9,6 +10,17 @@ from plotly import graph_objects as go
 
 START = "2015-01-01"
 TODAY = date.today().strftime("%Y-%m-%d")
+
+#東証のコードかどうかチェック
+def checkTicker(ticker):
+    # 有効な英大文字を定義
+    valid_letters = "ACDFGHJKLMPNRSTUWX-Y"
+    # 正規表現パターン
+    pattern = rf"^[0-9][0-9{valid_letters}][0-9][0-9{valid_letters}]$"
+    if not re.match(pattern, ticker):
+        return ticker
+    else:
+        return ticker + ".T"
 
 #元の株データを取得
 def load_rawdata(ticker):
@@ -49,7 +61,7 @@ st.title("株価予想")
 #マグニフィセント・セブン
 stocks = ["GOOG","AAPL","META","AMZN","MSFT","NVDA","TSLA"]
 
-text_input = st.text_input("ティッカーコードを入力してください：（例：8151.T, 4449.T, etc）")
+text_input = st.text_input("ティッカーコードを入力してください：（例：8151, 4449, SPY, etc）")
 #stocks.insert(0, text_input)
 
 #テキストボックスに入力あればそれを使用し
@@ -65,7 +77,7 @@ period = st.slider("予測期間", 1, 100, value=10)
 #既定値に読み込み前の表示
 data_load_state = st.text("データ読み込み中！")
 #データの読み込みと予測用データセット作成
-dataraw = load_rawdata(selected_stock)
+dataraw = load_rawdata(checkTicker(selected_stock))
 data = load_data(dataraw)
 #読み込み終了表示
 data_load_state.text("データを読み込みました！")
