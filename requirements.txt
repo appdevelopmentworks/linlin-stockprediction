@@ -3,3 +3,6 @@ yfinance
 pandas
 prophet
 plotly
+pandas_ta==0.3.14b0
+ta-lib==0.4.32
+numpy==1.26.4
