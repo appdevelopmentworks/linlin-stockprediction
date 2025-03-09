@@ -1,2 +1,1 @@
-ta-lib
-ta-lib-dev
+libta-lib-dev
