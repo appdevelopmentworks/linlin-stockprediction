@@ -75,7 +75,7 @@ st.caption("短期トレード（スイング用）にパラメータ設定し�
 ticker = st.text_input("TickerCode", value="GC=F")
 kikan = st.slider("表示期間(日):", min_value=30, max_value=300, value=100, step=1)
 
-df = yf.download(ticker)
+df = yf.download(ticker, progress=False)
 df.columns = [row[0] for row in df.columns]
 
 #Moving Average
