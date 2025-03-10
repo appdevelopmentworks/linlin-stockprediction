@@ -3,5 +3,6 @@ yfinance
 pandas
 prophet
 plotly
-pandas_ta==0.3.14b0
 numpy==1.26.4
+setuptools
+pandas_ta==0.3.14b0
