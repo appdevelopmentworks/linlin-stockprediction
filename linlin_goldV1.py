@@ -1,8 +1,6 @@
 import streamlit as st
-#from datetime import date
 import pandas as pd
 import yfinance as yf
-import talib as ta
 import pandas_ta as pdta
 import numpy as np
 from prophet.plot import plot_plotly
@@ -72,6 +70,7 @@ st.text("金に最適化したテクニカルチャートです。")
 image = Image.open("headere.png")
 st.image(image)
 st.caption("HMA（ハル移動平均）とHV(ヒストリカルボラティリティー)を取り入れてみました！")
+st.caption("短期トレード（スイング用）にパラメータ設定してあります")
 
 ticker = st.text_input("TickerCode", value="GC=F")
 kikan = st.slider("表示期間(日):", min_value=30, max_value=300, value=100, step=1)
@@ -88,10 +87,13 @@ df["sma200"] = pdta.sma(df['Close'], length=200)
 df['rsiF'] = pdta.rsi(df['Close'], length=3)
 df['rsiS'] = pdta.rsi(df['Close'], length=5)
 df['70'], df['30'] = [70 for _ in df['Close']], [30 for _ in df['Close']]
-#MACD
-df["macd"], df["signal"], df["hist"] = ta.MACD(df["Close"], fastperiod=12, slowperiod=26, signalperiod=9)
-#Historical voratirity
-df['hv'] = 100 * ta.STDDEV(np.log(df['Close'] / df['Close'].shift(1)), timeperiod=30) * np.sqrt(252)
+# MACD
+macd = pdta.macd(df["Close"], fast=12, slow=26, signal=9)
+df["macd"] = macd["MACD_12_26_9"]
+df["signal"] = macd["MACDs_12_26_9"]
+df["hist"] = macd["MACDh_12_26_9"]
+# Historical Volatility
+df['hv'] = df['Close'].pct_change().rolling(window=30).std() * np.sqrt(252) * 100
 #インデックスを文字列型に（休日の抜けを無くす）
 df.index = pd.to_datetime(df.index).strftime('%m-%d-%Y')
 
